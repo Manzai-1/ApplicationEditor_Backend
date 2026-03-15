@@ -1,0 +1,39 @@
+{
+  "name": "applicationeditor_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
+    "build": "tsc",
+    "start": "node -r tsconfig-paths/register dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manzai-1/ApplicationEditor_Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manzai-1/ApplicationEditor_Backend/issues"
+  },
+  "homepage": "https://github.com/Manzai-1/ApplicationEditor_Backend#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "tsconfig-paths": "^4.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}
