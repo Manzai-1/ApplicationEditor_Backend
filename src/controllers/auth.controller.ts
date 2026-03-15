@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 import { verifyToken } from '@/repositories/auth.repository';
 import { CreateSessionInput } from '@/schemas/zodSchemas';
 import { env } from '@/config/env';
+import { AppError } from '@/utils/AppError';
 
 export const createSession = async (req: Request, res: Response) => {
-  const { token } = req.validated.body as CreateSessionInput;
+  const { accessToken } = req.validated.body as CreateSessionInput;
 
-  const user = await verifyToken(token);
+  const user = await verifyToken(accessToken);
 
-  res.cookie('session', token, {
+  res.cookie('session', accessToken, {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
     sameSite: 'strict',
@@ -16,4 +17,16 @@ export const createSession = async (req: Request, res: Response) => {
   });
 
   res.json({ user });
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  const token = req.cookies.session;
+
+  if (!token) {
+    throw new AppError('Not authenticated', 401);
+  }
+
+  const user = await verifyToken(token);
+
+  res.json({ status: 'success', data: { user } });
 };
