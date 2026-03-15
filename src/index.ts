@@ -6,6 +6,7 @@ import { logger } from '@/utils/logger';
 import { requestLogger } from '@/middleware/requestLogger';
 import { errorHandler } from '@/middleware/errorHandler';
 import authRouter from '@/routes/auth.routes';
+import cvRouter from '@/routes/cv.routes';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api', cvRouter);
 
 app.use(errorHandler);
 

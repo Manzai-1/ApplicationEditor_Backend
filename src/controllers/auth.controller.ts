@@ -30,3 +30,13 @@ export const getMe = async (req: Request, res: Response) => {
 
   res.json({ status: 'success', data: { user } });
 };
+
+export const logout = async (_req: Request, res: Response) => {
+  res.clearCookie('session', {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+
+  res.json({ status: 'success' });
+};
