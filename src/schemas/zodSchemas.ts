@@ -18,18 +18,18 @@ const componentTypeSchema = z.enum([
 ]);
 
 const cvIdParamsSchema = z.object({
-  cvId: z.string().uuid(),
+  cvId: z.uuid(),
 });
 
 const componentIdParamsSchema = z.object({
   componentType: componentTypeSchema,
-  componentId: z.string().uuid(),
+  componentId: z.uuid(),
 });
 
 const cvComponentParamsSchema = z.object({
-  cvId: z.string().uuid(),
+  cvId: z.uuid(),
   componentType: componentTypeSchema,
-  componentId: z.string().uuid(),
+  componentId: z.uuid(),
 });
 
 // Profile
@@ -49,7 +49,7 @@ export type CreateCvInput = z.infer<typeof createCvSchema>;
 
 export const createCvFromTemplateSchema = z.object({
   name: z.string().min(1),
-  templateId: z.string().uuid(),
+  templateId: z.uuid(),
 });
 
 export type CreateCvFromTemplateInput = z.infer<typeof createCvFromTemplateSchema>;
@@ -73,7 +73,7 @@ export type CreateComponentInput = z.infer<typeof createComponentSchema>;
 
 export const linkComponentSchema = z.object({
   componentType: componentTypeSchema,
-  componentId: z.string().uuid(),
+  componentId: z.uuid(),
 });
 
 export type LinkComponentInput = z.infer<typeof linkComponentSchema>;
@@ -92,14 +92,14 @@ export type CvComponentParams = z.infer<typeof cvComponentParamsSchema>;
 
 // Reorder
 export const reorderParamsSchema = z.object({
-  cvId: z.string().uuid(),
+  cvId: z.uuid(),
   componentType: componentTypeSchema,
 });
 
 export type ReorderParams = z.infer<typeof reorderParamsSchema>;
 
 export const reorderBodySchema = z.object({
-  orderedIds: z.array(z.string().uuid()),
+  orderedIds: z.array(z.uuid()),
 });
 
 export type ReorderBodyInput = z.infer<typeof reorderBodySchema>;
