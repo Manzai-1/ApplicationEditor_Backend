@@ -9,7 +9,7 @@ interface ValidationSchemas {
 
 export const validate = (schemas: ValidationSchemas) => {
   return (req: Request, _res: Response, next: NextFunction) => {
-    req.validated = {};
+    req.validated = req.validated || {};
 
     if (schemas.body) {
       const result = schemas.body.safeParse(req.body);
