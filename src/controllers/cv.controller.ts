@@ -75,7 +75,8 @@ export const createComponent = async (req: Request, res: Response) => {
   const { cvId } = req.validated.params as CvIdParams;
   const { componentType, content } = req.validated.body as CreateComponentInput;
   const id = await cvRepo.createAndAddComponent(cvId, componentType, content);
-  res.json({ status: 'success', data: { id } });
+  const sortOrder = await cvRepo.getComponentSortOrder(cvId, componentType, id);
+  res.status(201).json({ status: 'success', data: { id, content, sort_order: sortOrder } });
 };
 
 export const linkComponent = async (req: Request, res: Response) => {
@@ -89,7 +90,8 @@ export const updateComponent = async (req: Request, res: Response) => {
   const { componentType, componentId } = req.validated.params as ComponentIdParams;
   const { content } = req.validated.body as UpdateComponentInput;
   await cvRepo.updateComponent(componentType, componentId, content);
-  res.json({ status: 'success' });
+  const updated = await cvRepo.getComponentById(componentType, componentId);
+  res.json({ status: 'success', data: updated });
 };
 
 export const removeComponentFromCv = async (req: Request, res: Response) => {
@@ -109,5 +111,5 @@ export const reorderComponents = async (req: Request, res: Response) => {
   const { cvId, componentType } = req.validated.params as ReorderParams;
   const { orderedIds } = req.validated.body as ReorderBodyInput;
   await cvRepo.reorderComponents(cvId, componentType, orderedIds);
-  res.json({ status: 'success' });
+  res.json({ status: 'success', data: { orderedIds } });
 };

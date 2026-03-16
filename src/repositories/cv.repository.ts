@@ -195,3 +195,70 @@ export const reorderComponents = async (
     throw new AppError(error.message, 500);
   }
 };
+
+// Component queries
+const componentTableMap: Record<string, string> = {
+  about: 'abouts',
+  skill: 'skills',
+  language: 'languages',
+  experience: 'experiences',
+  education: 'education',
+  certification: 'certifications',
+};
+
+const junctionTableMap: Record<string, { table: string; fk: string }> = {
+  about: { table: 'cv_abouts', fk: 'about_id' },
+  skill: { table: 'cv_skills', fk: 'skill_id' },
+  language: { table: 'cv_languages', fk: 'language_id' },
+  experience: { table: 'cv_experiences', fk: 'experience_id' },
+  education: { table: 'cv_education', fk: 'education_id' },
+  certification: { table: 'cv_certifications', fk: 'certification_id' },
+};
+
+export const getComponentById = async (
+  componentType: string,
+  componentId: string
+): Promise<{ id: string; content: Record<string, unknown> } | null> => {
+  const tableName = componentTableMap[componentType];
+  if (!tableName) {
+    throw new AppError(`Invalid component type: ${componentType}`, 400);
+  }
+
+  const { data, error } = await supabase
+    .from(tableName as 'abouts')
+    .select('id, content')
+    .eq('id', componentId)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null;
+    throw new AppError(error.message, 500);
+  }
+
+  return { id: data.id, content: data.content as Record<string, unknown> };
+};
+
+export const getComponentSortOrder = async (
+  cvId: string,
+  componentType: string,
+  componentId: string
+): Promise<number | null> => {
+  const junction = junctionTableMap[componentType];
+  if (!junction) {
+    throw new AppError(`Invalid component type: ${componentType}`, 400);
+  }
+
+  const { data, error } = await supabase
+    .from(junction.table as 'cv_abouts')
+    .select('sort_order')
+    .eq('cv_id', cvId)
+    .eq(junction.fk as 'about_id', componentId)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null;
+    throw new AppError(error.message, 500);
+  }
+
+  return data.sort_order;
+};
